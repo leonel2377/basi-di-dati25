@@ -1,0 +1,83 @@
+# Environnements virtuels Python
+.venv/
+venv/
+ENV/
+env/
+.venv
+venv
+ENV
+env
+
+# Fichiers Python compilés
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+
+# Distribution / packaging
+build/
+dist/
+*.egg-info/
+.eggs/
+*.egg
+
+# IDE et éditeurs
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.project
+.pydevproject
+.settings/
+
+# Système d'exploitation
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+Desktop.ini
+
+# Fichiers de données générés (optionnel - décommentez si nécessaire)
+# data/sales_history.csv
+
+# Fichiers de logs
+*.log
+logs/
+
+# Fichiers temporaires
+*.tmp
+*.bak
+*.swp
+*.swo
+
+# Fichiers de test
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+.hypothesis/
+
+# Fichiers Jupyter Notebook
+.ipynb_checkpoints
+*.ipynb_checkpoints
+
+# Fichiers de sauvegarde
+*.pyc
+*.pyo
+*.pyd
+
+# Fichiers de configuration locale
+.env
+.env.local
+config.local.py
+
+# Fichiers de graphiques générés (optionnel)
+# *.png
+# *.jpg
+# *.pdf
+

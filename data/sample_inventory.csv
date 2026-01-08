@@ -1,0 +1,17 @@
+product_id,product_name,category,quantity,reorder_point,critical_point,reorder_quantity
+SKU-1001,USB-C Cable,Accessories,120,50,20,80
+SKU-1002,Wireless Mouse,Peripherals,45,40,15,60
+SKU-1003,Mechanical Keyboard,Peripherals,18,30,10,40
+SKU-1004,27in Monitor,Displays,8,15,5,20
+SKU-1005,External SSD 1TB,Storage,3,10,2,25
+SKU-1006,Laptop Stand,Accessories,55,25,8,30
+SKU-1007,Webcam 1080p,Peripherals,12,20,5,15
+SKU-1008,USB Hub 4-Port,Accessories,5,15,5,20
+SKU-1009,HDMI Cable 2m,Accessories,25,30,10,50
+SKU-1010,Wireless Headphones,Peripherals,2,20,5,30
+SKU-1011,32in 4K Monitor,Displays,15,10,3,25
+SKU-1015,manette ,Displays,15,10,3,25
+SKU-1012,Bluetooth Speaker,Peripherals,30,25,10,40
+SKU-1013,USB Flash Drive 64GB,Storage,50,30,15,60
+SKU-1014,iphone 64GB,Storage,50,10,5,50
+
