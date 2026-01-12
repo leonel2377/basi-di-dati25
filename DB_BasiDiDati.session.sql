@@ -1,0 +1,10 @@
+USE viaggiAerei;
+
+CREATE TABLE CompagnieAeree (
+    IDCompagnia INT AUTO_INCREMENT PRIMARY KEY,
+    Nome VARCHAR(100) NOT NULL,
+    CodiceIATA VARCHAR(5) NOT NULL UNIQUE,
+    Paese VARCHAR(50) NOT NULL
+);
+
+
