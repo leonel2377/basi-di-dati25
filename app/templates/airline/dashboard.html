@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard Compagnia - Flight Booking System{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <h2 class="mb-4"><i class="bi bi-speedometer2"></i> Dashboard Compagnia Aerea</h2>
+        <p class="lead">Benvenuto, {{ compagnia.nome }} ({{ compagnia.codice_iata }})</p>
+    </div>
+</div>
+
+<div class="row mb-4">
+    <div class="col-md-4">
+        <div class="card text-white bg-primary">
+            <div class="card-body">
+                <h5 class="card-title">Voli Totali</h5>
+                <h2>{{ total_voli }}</h2>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card text-white bg-success">
+            <div class="card-body">
+                <h5 class="card-title">Biglietti Venduti</h5>
+                <h2>{{ total_biglietti }}</h2>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card text-white bg-info">
+            <div class="card-body">
+                <h5 class="card-title">Ricavi Totali</h5>
+                <h2>€{{ "%.2f"|format(total_ricavi) }}</h2>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h5>Tratte Più Richieste</h5>
+            </div>
+            <div class="card-body">
+                {% if tratte_popolari %}
+                    <ul class="list-group">
+                        {% for aeroporto_partenza_id, aeroporto_destinazione_id, num_biglietti in tratte_popolari %}
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                {% set ap_partenza = aeroporti|selectattr('id_aeroporto', 'equalto', aeroporto_partenza_id)|first %}
+                                {% set ap_destinazione = aeroporti|selectattr('id_aeroporto', 'equalto', aeroporto_destinazione_id)|first %}
+                                {{ ap_partenza.città if ap_partenza else 'N/A' }} → {{ ap_destinazione.città if ap_destinazione else 'N/A' }}
+                                <span class="badge bg-primary rounded-pill">{{ num_biglietti }} biglietti</span>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                {% else %}
+                    <p class="text-muted">Nessun dato disponibile</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h5>Azioni Rapide</h5>
+            </div>
+            <div class="card-body">
+                <a href="{{ url_for('airline.gestisci_aerei') }}" class="btn btn-success btn-block mb-2 w-100">
+                    <i class="bi bi-airplane"></i> Gestisci Aerei
+                </a>
+                <a href="{{ url_for('airline.gestisci_voli') }}" class="btn btn-info btn-block mb-2 w-100">
+                    <i class="bi bi-calendar-event"></i> Gestisci Voli
+                </a>
+                <a href="{{ url_for('airline.gestisci_aeroporti') }}" class="btn btn-warning btn-block mb-2 w-100">
+                    <i class="bi bi-building"></i> Gestisci Aeroporti
+                </a>
+                <a href="{{ url_for('airline.profilo') }}" class="btn btn-secondary btn-block w-100">
+                    <i class="bi bi-person"></i> Profilo
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+

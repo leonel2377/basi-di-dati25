@@ -1,0 +1,101 @@
+{% extends "base.html" %}
+
+{% block title %}Gestione Tratte - Flight Booking System{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <h2 class="mb-4">Gestione Tratte</h2>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h5>Nuova Tratta</h5>
+            </div>
+            <div class="card-body">
+                <form method="POST">
+                    {{ form.hidden_tag() }}
+                    <div class="mb-3">
+                        {{ form.departure_airport.label(class="form-label") }}
+                        {{ form.departure_airport(class="form-select") }}
+                    </div>
+                    <div class="mb-3">
+                        {{ form.arrival_airport.label(class="form-label") }}
+                        {{ form.arrival_airport(class="form-select") }}
+                    </div>
+                    <div class="mb-3">
+                        {{ form.base_duration_minutes.label(class="form-label") }}
+                        {{ form.base_duration_minutes(class="form-control") }}
+                    </div>
+                    <div class="mb-3">
+                        {{ form.economy_price.label(class="form-label") }}
+                        {{ form.economy_price(class="form-control") }}
+                    </div>
+                    <div class="mb-3">
+                        {{ form.business_price.label(class="form-label") }}
+                        {{ form.business_price(class="form-control") }}
+                    </div>
+                    <div class="mb-3">
+                        {{ form.first_class_price.label(class="form-label") }}
+                        {{ form.first_class_price(class="form-control") }}
+                    </div>
+                    <div class="d-grid">
+                        {{ form.submit(class="btn btn-primary") }}
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h5>Tratte Esistenti</h5>
+            </div>
+            <div class="card-body">
+                {% if routes %}
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Partenza</th>
+                                    <th>Destinazione</th>
+                                    <th>Durata</th>
+                                    <th>Prezzi</th>
+                                    <th>Stato</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for route in routes %}
+                                    <tr>
+                                        <td>{{ route.departure_airport.city }} ({{ route.departure_airport.iata_code }})</td>
+                                        <td>{{ route.arrival_airport.city }} ({{ route.arrival_airport.iata_code }})</td>
+                                        <td>{{ route.base_duration_minutes }} min</td>
+                                        <td>
+                                            <small>E: €{{ "%.2f"|format(route.economy_price) }}<br>
+                                            B: €{{ "%.2f"|format(route.business_price) }}<br>
+                                            F: €{{ "%.2f"|format(route.first_class_price) }}</small>
+                                        </td>
+                                        <td>
+                                            {% if route.active %}
+                                                <span class="badge bg-success">Attiva</span>
+                                            {% else %}
+                                                <span class="badge bg-secondary">Inattiva</span>
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                {% else %}
+                    <p class="text-muted">Nessuna tratta creata ancora.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+

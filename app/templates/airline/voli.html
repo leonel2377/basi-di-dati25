@@ -1,0 +1,173 @@
+{% extends "base.html" %}
+
+{% block title %}Gestione Voli - Flight Booking System{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <h2 class="mb-4">Gestione Voli - {{ compagnia.nome }}</h2>
+    </div>
+</div>
+
+<div class="row mb-4">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header">
+                <h5>Nuovo Volo</h5>
+            </div>
+            <div class="card-body">
+                {% if not has_aircrafts %}
+                <div class="alert alert-warning">
+                    <i class="bi bi-exclamation-triangle"></i> 
+                    <strong>Attenzione:</strong> Non hai ancora aggiunto nessun aereo alla flotta. 
+                    <a href="{{ url_for('airline.gestisci_aerei') }}" class="alert-link">Aggiungi un aereo</a> prima di creare un volo.
+                </div>
+                {% endif %}
+                <form method="POST">
+                    {{ form.hidden_tag() }}
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="mb-3">
+                                {{ form.aeroporto_partenza.label(class="form-label") }}
+                                {{ form.aeroporto_partenza(class="form-select") }}
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="mb-3">
+                                {{ form.aeroporto_destinazione.label(class="form-label") }}
+                                {{ form.aeroporto_destinazione(class="form-select") }}
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="mb-3">
+                                {{ form.id_aereo.label(class="form-label") }}
+                                {{ form.id_aereo(class="form-select") }}
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="mb-3">
+                                {{ form.data_partenza.label(class="form-label") }}
+                                {{ form.data_partenza(class="form-control", type="date") }}
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="mb-3">
+                                {{ form.ora_partenza.label(class="form-label") }}
+                                {{ form.ora_partenza(class="form-control", type="time") }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-2">
+                            <div class="mb-3">
+                                {{ form.data_arrivo.label(class="form-label") }}
+                                {{ form.data_arrivo(class="form-control", type="date") }}
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="mb-3">
+                                {{ form.ora_arrivo.label(class="form-label") }}
+                                {{ form.ora_arrivo(class="form-control", type="time") }}
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="mb-3">
+                                {{ form.posti_disponibili.label(class="form-label") }}
+                                {{ form.posti_disponibili(class="form-control") }}
+                                <small class="text-muted">Lascia vuoto per usare tutti i posti dell'aereo</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="mb-3">
+                                {{ form.prezzo_economy.label(class="form-label") }}
+                                <div class="input-group">
+                                    <span class="input-group-text">€</span>
+                                    {{ form.prezzo_economy(class="form-control") }}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="mb-3">
+                                {{ form.prezzo_business.label(class="form-label") }}
+                                <div class="input-group">
+                                    <span class="input-group-text">€</span>
+                                    {{ form.prezzo_business(class="form-control") }}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="mb-3">
+                                {{ form.prezzo_first.label(class="form-label") }}
+                                <div class="input-group">
+                                    <span class="input-group-text">€</span>
+                                    {{ form.prezzo_first(class="form-control") }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="d-grid">
+                                {{ form.submit(class="btn btn-primary") }}
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h5>Voli Recenti</h5>
+            </div>
+            <div class="card-body">
+                {% if voli %}
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>ID Volo</th>
+                                    <th>Partenza</th>
+                                    <th>Destinazione</th>
+                                    <th>Data/Ora Partenza</th>
+                                    <th>Data/Ora Arrivo</th>
+                                    <th>Posti Disponibili</th>
+                                    <th>Aereo</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for volo in voli %}
+                                    <tr>
+                                        <td>{{ volo.id_volo }}</td>
+                                        <td>{{ volo.aeroporto_partenza_obj.città }} ({{ volo.aeroporto_partenza_obj.codice_iata }})</td>
+                                        <td>{{ volo.aeroporto_destinazione_obj.città }} ({{ volo.aeroporto_destinazione_obj.codice_iata }})</td>
+                                        <td>{{ volo.data_partenza.strftime('%d/%m/%Y') }} {{ volo.ora_partenza.strftime('%H:%M') }}</td>
+                                        <td>{{ volo.data_arrivo.strftime('%d/%m/%Y') }} {{ volo.ora_arrivo.strftime('%H:%M') }}</td>
+                                        <td>{{ volo.posti_disponibili }}</td>
+                                        <td>{{ volo.aereo.modello }}</td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                {% else %}
+                    <p class="text-muted">Nessun volo creato ancora.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-3">
+    <div class="col-12">
+        <a href="{{ url_for('airline.dashboard') }}" class="btn btn-secondary">Torna alla Dashboard</a>
+    </div>
+</div>
+{% endblock %}
+

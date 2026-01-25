@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard Passeggero - Flight Booking System{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <h2 class="mb-4"><i class="bi bi-person-circle"></i> Dashboard Passeggero</h2>
+        <p class="lead">Benvenuto, {{ passeggero.nome }} {{ passeggero.cognome }}</p>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5>Le Mie Prenotazioni</h5>
+                <a href="{{ url_for('main.search_flights') }}" class="btn btn-primary btn-sm">
+                    <i class="bi bi-search"></i> Cerca Nuovi Voli
+                </a>
+            </div>
+            <div class="card-body">
+                {% if biglietti %}
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>ID Biglietto</th>
+                                    <th>Volo</th>
+                                    <th>Data Acquisto</th>
+                                    <th>Classe</th>
+                                    <th>Prezzo</th>
+                                    <th>Azioni</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for biglietto in biglietti %}
+                                    <tr>
+                                        <td><strong>{{ biglietto.id_biglietto }}</strong></td>
+                                        <td>
+                                            {{ biglietto.volo.aeroporto_partenza_obj.città }} → {{ biglietto.volo.aeroporto_destinazione_obj.città }}
+                                            <br>
+                                            <small class="text-muted">{{ biglietto.volo.data_partenza.strftime('%d/%m/%Y') }} {{ biglietto.volo.ora_partenza.strftime('%H:%M') }}</small>
+                                        </td>
+                                        <td>{{ biglietto.data_acquisto.strftime('%d/%m/%Y') }}</td>
+                                        <td>
+                                            <span class="badge bg-info">{{ biglietto.classe }}</span>
+                                        </td>
+                                        <td>€{{ "%.2f"|format(biglietto.prezzo) }}</td>
+                                        <td>
+                                            <a href="{{ url_for('passenger.view_biglietto', biglietto_id=biglietto.id_biglietto) }}" class="btn btn-sm btn-info">
+                                                Dettagli
+                                            </a>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                {% else %}
+                    <div class="text-center py-5">
+                        <i class="bi bi-inbox" style="font-size: 3rem; color: #ccc;"></i>
+                        <p class="text-muted mt-3">Nessun biglietto acquistato ancora.</p>
+                        <a href="{{ url_for('main.search_flights') }}" class="btn btn-primary">
+                            Cerca Voli
+                        </a>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-body text-center">
+                <a href="{{ url_for('passenger.profilo') }}" class="btn btn-outline-primary w-100">
+                    <i class="bi bi-person"></i> Gestisci Profilo
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+

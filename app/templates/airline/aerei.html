@@ -1,0 +1,91 @@
+{% extends "base.html" %}
+
+{% block title %}Gestione Aerei - Flight Booking System{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <h2 class="mb-4">Gestione Aerei - {{ compagnia.nome }}</h2>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h5>Nuovo Aereo</h5>
+            </div>
+            <div class="card-body">
+                <form method="POST">
+                    {{ form.hidden_tag() }}
+                    <div class="mb-3">
+                        {{ form.modello.label(class="form-label") }}
+                        {{ form.modello(class="form-control") }}
+                        {% if form.modello.errors %}
+                            <div class="text-danger">
+                                {% for error in form.modello.errors %}
+                                    <small>{{ error }}</small>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+                    <div class="mb-3">
+                        {{ form.posti_totali.label(class="form-label") }}
+                        {{ form.posti_totali(class="form-control") }}
+                        {% if form.posti_totali.errors %}
+                            <div class="text-danger">
+                                {% for error in form.posti_totali.errors %}
+                                    <small>{{ error }}</small>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+                    <div class="d-grid">
+                        {{ form.submit(class="btn btn-primary") }}
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h5>Aerei della Flotta</h5>
+            </div>
+            <div class="card-body">
+                {% if aerei %}
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Modello</th>
+                                    <th>Posti Totali</th>
+                                    <th>Voli Operati</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for aereo in aerei %}
+                                    <tr>
+                                        <td>{{ aereo.modello }}</td>
+                                        <td>{{ aereo.posti_totali }}</td>
+                                        <td>{{ aereo.voli.count() }}</td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                {% else %}
+                    <p class="text-muted">Nessun aereo nella flotta ancora.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-3">
+    <div class="col-12">
+        <a href="{{ url_for('airline.dashboard') }}" class="btn btn-secondary">Torna alla Dashboard</a>
+    </div>
+</div>
+{% endblock %}
+

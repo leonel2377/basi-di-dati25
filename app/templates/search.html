@@ -1,0 +1,135 @@
+{% extends "base.html" %}
+
+{% block title %}Cerca Voli - Flight Booking System{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-lg-12">
+        <h2 class="mb-4"><i class="bi bi-search"></i> Cerca Voli</h2>
+        
+        <div class="card mb-4">
+            <div class="card-body">
+                <form method="POST">
+                    {{ form.hidden_tag() }}
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="mb-3">
+                                {{ form.aeroporto_partenza.label(class="form-label") }}
+                                {{ form.aeroporto_partenza(class="form-select") }}
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="mb-3">
+                                {{ form.aeroporto_destinazione.label(class="form-label") }}
+                                {{ form.aeroporto_destinazione(class="form-select") }}
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="mb-3">
+                                {{ form.data_partenza.label(class="form-label") }}
+                                {{ form.data_partenza(class="form-control", type="date") }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            {{ form.submit(class="btn btn-primary") }}
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        {% if search_performed %}
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h4>Risultati della ricerca</h4>
+                <div>
+                    <label class="me-2">Ordina per:</label>
+                    <a href="?sort=prezzo" class="btn btn-sm btn-outline-primary">Prezzo</a>
+                    <a href="?sort=durata" class="btn btn-sm btn-outline-primary">Durata</a>
+                    <a href="?sort=soste" class="btn btn-sm btn-outline-primary">Soste</a>
+                </div>
+            </div>
+
+            {% if results %}
+                {% for result in results %}
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-8">
+                                    <h5>
+                                        {% if result.stops == 0 %}
+                                            <span class="badge bg-success">Volo Diretto</span>
+                                        {% else %}
+                                            <span class="badge bg-warning">{{ result.stops }} Scalo</span>
+                                        {% endif %}
+                                    </h5>
+                                    {% if result.type == 'direct' %}
+                                        {% set volo = result.volo %}
+                                        <div class="mb-2">
+                                            <strong>{{ volo.aeroporto_partenza_obj.città }} ({{ volo.aeroporto_partenza_obj.codice_iata }})</strong>
+                                            <i class="bi bi-arrow-right"></i>
+                                            <strong>{{ volo.aeroporto_destinazione_obj.città }} ({{ volo.aeroporto_destinazione_obj.codice_iata }})</strong>
+                                            <br>
+                                            <small class="text-muted">
+                                                Partenza: {{ volo.data_partenza.strftime('%d/%m/%Y') }} {{ volo.ora_partenza.strftime('%H:%M') }} - 
+                                                Arrivo: {{ volo.data_arrivo.strftime('%d/%m/%Y') }} {{ volo.ora_arrivo.strftime('%H:%M') }}
+                                            </small>
+                                            <br>
+                                            <small class="text-info">Posti disponibili: {{ volo.posti_disponibili }}</small>
+                                        </div>
+                                    {% else %}
+                                        {% for volo in result.voli %}
+                                            <div class="mb-2">
+                                                <strong>{{ volo.aeroporto_partenza_obj.città }} ({{ volo.aeroporto_partenza_obj.codice_iata }})</strong>
+                                                <i class="bi bi-arrow-right"></i>
+                                                <strong>{{ volo.aeroporto_destinazione_obj.città }} ({{ volo.aeroporto_destinazione_obj.codice_iata }})</strong>
+                                                <br>
+                                                <small class="text-muted">
+                                                    Partenza: {{ volo.data_partenza.strftime('%d/%m/%Y') }} {{ volo.ora_partenza.strftime('%H:%M') }} - 
+                                                    Arrivo: {{ volo.data_arrivo.strftime('%d/%m/%Y') }} {{ volo.ora_arrivo.strftime('%H:%M') }}
+                                                </small>
+                                                {% if not loop.last %}
+                                                    <br><small class="text-info">Scalo: {{ result.layover_hours|round(1) }} ore</small>
+                                                {% endif %}
+                                            </div>
+                                        {% endfor %}
+                                    {% endif %}
+                                </div>
+                                <div class="col-md-4 text-end">
+                                    <h4 class="text-primary">€{{ "%.2f"|format(result.prezzo) }}</h4>
+                                    {% if result.type == 'direct' %}
+                                        {% set volo = result.volo %}
+                                        {% set durata = ((volo.datetime_arrivo - volo.datetime_partenza).total_seconds() / 60) %}
+                                        <p class="text-muted">Durata: {{ (durata / 60)|round(1) }} ore</p>
+                                    {% else %}
+                                        <p class="text-muted">Durata: {{ (result.durata / 60)|round(1) }} ore</p>
+                                    {% endif %}
+                                    {% if current_user.is_authenticated %}
+                                        {% if result.type == 'direct' %}
+                                            <a href="{{ url_for('passenger.acquista_biglietto', volo_id=result.volo.id_volo) }}" class="btn btn-primary">
+                                                Acquista
+                                            </a>
+                                        {% else %}
+                                            <small class="text-muted">Seleziona un volo per acquistare</small>
+                                        {% endif %}
+                                    {% else %}
+                                        <a href="{{ url_for('auth.login') }}" class="btn btn-primary">
+                                            Accedi per Acquista
+                                        </a>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <div class="alert alert-info">
+                    <i class="bi bi-info-circle"></i> Nessun volo trovato per i criteri selezionati.
+                </div>
+            {% endif %}
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
+

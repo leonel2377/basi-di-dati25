@@ -1,0 +1,93 @@
+{% extends "base.html" %}
+
+{% block title %}Gestione Aerei - Flight Booking System{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <h2 class="mb-4">Gestione Aerei</h2>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h5>Nuovo Aereo</h5>
+            </div>
+            <div class="card-body">
+                <form method="POST">
+                    {{ form.hidden_tag() }}
+                    <div class="mb-3">
+                        {{ form.model.label(class="form-label") }}
+                        {{ form.model(class="form-control") }}
+                    </div>
+                    <div class="mb-3">
+                        {{ form.manufacturer.label(class="form-label") }}
+                        {{ form.manufacturer(class="form-control") }}
+                    </div>
+                    <div class="mb-3">
+                        {{ form.total_seats.label(class="form-label") }}
+                        {{ form.total_seats(class="form-control") }}
+                    </div>
+                    <div class="mb-3">
+                        {{ form.economy_seats.label(class="form-label") }}
+                        {{ form.economy_seats(class="form-control") }}
+                    </div>
+                    <div class="mb-3">
+                        {{ form.business_seats.label(class="form-label") }}
+                        {{ form.business_seats(class="form-control") }}
+                    </div>
+                    <div class="mb-3">
+                        {{ form.first_class_seats.label(class="form-label") }}
+                        {{ form.first_class_seats(class="form-control") }}
+                    </div>
+                    <div class="d-grid">
+                        {{ form.submit(class="btn btn-primary") }}
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h5>Aerei Esistenti</h5>
+            </div>
+            <div class="card-body">
+                {% if aircrafts %}
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Modello</th>
+                                    <th>Produttore</th>
+                                    <th>Posti Totali</th>
+                                    <th>Economy</th>
+                                    <th>Business</th>
+                                    <th>First Class</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for aircraft in aircrafts %}
+                                    <tr>
+                                        <td>{{ aircraft.model }}</td>
+                                        <td>{{ aircraft.manufacturer or '-' }}</td>
+                                        <td>{{ aircraft.total_seats }}</td>
+                                        <td>{{ aircraft.economy_seats }}</td>
+                                        <td>{{ aircraft.business_seats }}</td>
+                                        <td>{{ aircraft.first_class_seats }}</td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                {% else %}
+                    <p class="text-muted">Nessun aereo aggiunto ancora.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+

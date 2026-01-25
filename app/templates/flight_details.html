@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+
+{% block title %}Dettagli Volo - Flight Booking System{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-8 mx-auto">
+        <h2 class="mb-4">Dettagli Volo</h2>
+        
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5>Informazioni Volo</h5>
+            </div>
+            <div class="card-body">
+                <p><strong>Volo ID:</strong> {{ volo.id_volo }}</p>
+                <p><strong>Compagnia:</strong> {{ volo.compagnia.nome }}</p>
+                <p><strong>Partenza:</strong> {{ volo.aeroporto_partenza_obj.città }} ({{ volo.aeroporto_partenza_obj.codice_iata }})</p>
+                <p><strong>Destinazione:</strong> {{ volo.aeroporto_destinazione_obj.città }} ({{ volo.aeroporto_destinazione_obj.codice_iata }})</p>
+                <p><strong>Data/Ora Partenza:</strong> {{ volo.data_partenza.strftime('%d/%m/%Y') }} {{ volo.ora_partenza.strftime('%H:%M') }}</p>
+                <p><strong>Data/Ora Arrivo:</strong> {{ volo.data_arrivo.strftime('%d/%m/%Y') }} {{ volo.ora_arrivo.strftime('%H:%M') }}</p>
+                <p><strong>Durata:</strong> {{ ((volo.datetime_arrivo - volo.datetime_partenza).total_seconds() / 60)|round }} minuti</p>
+                <p><strong>Posti Disponibili:</strong> {{ volo.posti_disponibili }}</p>
+            </div>
+        </div>
+
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5>Prezzi per Classe</h5>
+            </div>
+            <div class="card-body">
+                <ul class="list-group">
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <span><strong>Economy</strong></span>
+                        <strong class="text-primary">€{{ "%.2f"|format(volo.prezzo_economy) }}</strong>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <span><strong>Business</strong></span>
+                        <strong class="text-primary">€{{ "%.2f"|format(volo.prezzo_business) }}</strong>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <span><strong>First Class</strong></span>
+                        <strong class="text-primary">€{{ "%.2f"|format(volo.prezzo_first) }}</strong>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5>Informazioni Aereo</h5>
+            </div>
+            <div class="card-body">
+                <p><strong>Modello:</strong> {{ volo.aereo.modello }}</p>
+                <p><strong>Posti Totali:</strong> {{ volo.aereo.posti_totali }}</p>
+                <p><strong>Posti Disponibili:</strong> {{ volo.posti_disponibili }}</p>
+                {% if current_user.is_authenticated %}
+                    <a href="{{ url_for('passenger.acquista_biglietto', volo_id=volo.id_volo) }}" class="btn btn-primary">
+                        Acquista Biglietto
+                    </a>
+                {% else %}
+                    <a href="{{ url_for('auth.login') }}" class="btn btn-primary">
+                        Accedi per Acquista
+                    </a>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="mt-3">
+            <a href="{{ url_for('main.search_flights') }}" class="btn btn-secondary">Torna alla Ricerca</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

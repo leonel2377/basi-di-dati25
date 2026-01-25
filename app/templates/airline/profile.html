@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+
+{% block title %}Profilo Compagnia - Flight Booking System{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-8 mx-auto">
+        <h2 class="mb-4">Profilo Compagnia Aerea</h2>
+        
+        <div class="card">
+            <div class="card-body">
+                <form method="POST">
+                    {{ form.hidden_tag() }}
+                    <div class="mb-3">
+                        {{ form.company_name.label(class="form-label") }}
+                        {{ form.company_name(class="form-control") }}
+                        {% if form.company_name.errors %}
+                            <div class="text-danger">
+                                {% for error in form.company_name.errors %}
+                                    <small>{{ error }}</small>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+                    <div class="mb-3">
+                        {{ form.iata_code.label(class="form-label") }}
+                        {{ form.iata_code(class="form-control") }}
+                        {% if form.iata_code.errors %}
+                            <div class="text-danger">
+                                {% for error in form.iata_code.errors %}
+                                    <small>{{ error }}</small>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+                    <div class="mb-3">
+                        {{ form.icao_code.label(class="form-label") }}
+                        {{ form.icao_code(class="form-control") }}
+                        {% if form.icao_code.errors %}
+                            <div class="text-danger">
+                                {% for error in form.icao_code.errors %}
+                                    <small>{{ error }}</small>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+                    <div class="d-grid">
+                        {{ form.submit(class="btn btn-primary") }}
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+

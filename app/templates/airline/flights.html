@@ -1,0 +1,117 @@
+{% extends "base.html" %}
+
+{% block title %}Gestione Voli - Flight Booking System{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <h2 class="mb-4">Gestione Voli</h2>
+    </div>
+</div>
+
+<div class="row mb-4">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header">
+                <h5>Nuovo Volo</h5>
+            </div>
+            <div class="card-body">
+                <form method="POST">
+                    {{ csrf_token() }}
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="mb-3">
+                                <label class="form-label">Tratta</label>
+                                <select name="route_id" class="form-select" required>
+                                    <option value="">Seleziona tratta...</option>
+                                    {% for route in routes %}
+                                        <option value="{{ route.id }}">
+                                            {{ route.departure_airport.city }} → {{ route.arrival_airport.city }}
+                                        </option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="mb-3">
+                                <label class="form-label">Aereo</label>
+                                <select name="aircraft_id" class="form-select" required>
+                                    <option value="">Seleziona aereo...</option>
+                                    {% for aircraft in aircrafts %}
+                                        <option value="{{ aircraft.id }}">
+                                            {{ aircraft.model }} ({{ aircraft.total_seats }} posti)
+                                        </option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="mb-3">
+                                <label class="form-label">Numero Volo</label>
+                                <input type="text" name="flight_number" class="form-control" required>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="mb-3">
+                                <label class="form-label">Data e Ora Partenza</label>
+                                <input type="datetime-local" name="departure_time" class="form-control" required>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="mb-3">
+                                <label class="form-label">&nbsp;</label>
+                                <button type="submit" class="btn btn-primary w-100">Crea Volo</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h5>Voli Recenti</h5>
+            </div>
+            <div class="card-body">
+                {% if flights %}
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Numero Volo</th>
+                                    <th>Tratta</th>
+                                    <th>Partenza</th>
+                                    <th>Arrivo</th>
+                                    <th>Stato</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for flight in flights %}
+                                    <tr>
+                                        <td>{{ flight.flight_number }}</td>
+                                        <td>{{ flight.route.departure_airport.city }} → {{ flight.route.arrival_airport.city }}</td>
+                                        <td>{{ flight.departure_time.strftime('%d/%m/%Y %H:%M') }}</td>
+                                        <td>{{ flight.arrival_time.strftime('%d/%m/%Y %H:%M') }}</td>
+                                        <td>
+                                            <span class="badge bg-{{ 'success' if flight.status == 'scheduled' else 'warning' }}">
+                                                {{ flight.status }}
+                                            </span>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                {% else %}
+                    <p class="text-muted">Nessun volo creato ancora.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+

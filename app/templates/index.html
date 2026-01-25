@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+
+{% block title %}Home - Flight Booking System{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-lg-8 mx-auto">
+        <div class="jumbotron bg-light p-5 rounded">
+            <h1 class="display-4">Benvenuto nel Sistema di Prenotazione Voli</h1>
+            <p class="lead">Cerca e prenota i tuoi voli con facilità. Gestisci le tue prenotazioni e scopri le migliori offerte.</p>
+            <hr class="my-4">
+            <p>Cerca voli disponibili tra centinaia di destinazioni.</p>
+            <a class="btn btn-primary btn-lg" href="{{ url_for('main.search_flights') }}" role="button">
+                <i class="bi bi-search"></i> Cerca Voli
+            </a>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-5">
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-body text-center">
+                <i class="bi bi-airplane-fill text-primary" style="font-size: 3rem;"></i>
+                <h5 class="card-title mt-3">Cerca Voli</h5>
+                <p class="card-text">Trova il volo perfetto per la tua destinazione. Supporto per voli diretti e con scalo.</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-body text-center">
+                <i class="bi bi-ticket-perforated text-success" style="font-size: 3rem;"></i>
+                <h5 class="card-title mt-3">Prenota Biglietti</h5>
+                <p class="card-text">Scegli il tuo posto e completa la prenotazione in pochi semplici passaggi.</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-body text-center">
+                <i class="bi bi-building text-info" style="font-size: 3rem;"></i>
+                <h5 class="card-title mt-3">Per Compagnie Aeree</h5>
+                <p class="card-text">Gestisci le tue tratte, aerei e visualizza statistiche dettagliate.</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+

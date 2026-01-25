@@ -1,0 +1,126 @@
+{% extends "base.html" %}
+
+{% block title %}Gestione Aeroporti - Flight Booking System{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <h2 class="mb-4">Gestione Aeroporti</h2>
+        <div class="alert alert-info">
+            <h6><i class="bi bi-info-circle"></i> Informazioni</h6>
+            <p class="mb-0">
+                Gli aeroporti sono <strong>condivisi tra tutte le compagnie aeree</strong>. 
+                Usa questa pagina per <strong>aggiungere nuovi aeroporti</strong> al sistema quando devi creare voli verso/da aeroporti che non esistono ancora.
+            </p>
+            <p class="mb-0 mt-2">
+                <strong>Esempio:</strong> Se vuoi creare un volo per Tokyo ma l'aeroporto non è presente, aggiungilo qui prima di creare il volo.
+            </p>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h5>Nuovo Aeroporto</h5>
+            </div>
+            <div class="card-body">
+                <form method="POST">
+                    {{ form.hidden_tag() }}
+                    <div class="mb-3">
+                        {{ form.nome.label(class="form-label") }}
+                        {{ form.nome(class="form-control") }}
+                        {% if form.nome.errors %}
+                            <div class="text-danger">
+                                {% for error in form.nome.errors %}
+                                    <small>{{ error }}</small>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+                    <div class="mb-3">
+                        {{ form.città.label(class="form-label") }}
+                        {{ form.città(class="form-control") }}
+                        {% if form.città.errors %}
+                            <div class="text-danger">
+                                {% for error in form.città.errors %}
+                                    <small>{{ error }}</small>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+                    <div class="mb-3">
+                        {{ form.paese.label(class="form-label") }}
+                        {{ form.paese(class="form-control") }}
+                        {% if form.paese.errors %}
+                            <div class="text-danger">
+                                {% for error in form.paese.errors %}
+                                    <small>{{ error }}</small>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+                    <div class="mb-3">
+                        {{ form.codice_iata.label(class="form-label") }}
+                        {{ form.codice_iata(class="form-control") }}
+                        <small class="text-muted">Codice IATA a 3 lettere (es. FCO, MXP)</small>
+                        {% if form.codice_iata.errors %}
+                            <div class="text-danger">
+                                {% for error in form.codice_iata.errors %}
+                                    <small>{{ error }}</small>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+                    <div class="d-grid">
+                        {{ form.submit(class="btn btn-primary") }}
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h5>Aeroporti Disponibili</h5>
+            </div>
+            <div class="card-body">
+                {% if aeroporti %}
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Codice IATA</th>
+                                    <th>Nome</th>
+                                    <th>Città</th>
+                                    <th>Paese</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for aeroporto in aeroporti %}
+                                    <tr>
+                                        <td><strong>{{ aeroporto.codice_iata }}</strong></td>
+                                        <td>{{ aeroporto.nome }}</td>
+                                        <td>{{ aeroporto.città }}</td>
+                                        <td>{{ aeroporto.paese }}</td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                {% else %}
+                    <p class="text-muted">Nessun aeroporto nel sistema.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-3">
+    <div class="col-12">
+        <a href="{{ url_for('airline.dashboard') }}" class="btn btn-secondary">Torna alla Dashboard</a>
+    </div>
+</div>
+{% endblock %}
+
